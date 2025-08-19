@@ -18,8 +18,7 @@ manifest:
       remote: urob
       revision: main
     - name: zmk-dongle-display
-      remote: hitsmaxft
+      remote: cornix-shield
       revision: main
-      clone-depth: 1
   self:
     path: config
