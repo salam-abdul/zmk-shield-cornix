@@ -25,6 +25,7 @@ include:
     artifact-name: cornix_dongle
 
   - board: cornix_ph_left
+    shield: cornix_left
     artifact-name: cornix_left_for_dongle
 
   - board: cornix_right
@@ -33,3 +34,7 @@ include:
   - board: cornix_e73
     shield: settings_reset
     artifact-name: reset
+
+  - board: cornix_ph_right
+    shield: cornix_right
+zephyr-base: zephyr
