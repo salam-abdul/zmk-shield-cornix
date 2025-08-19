@@ -19,9 +19,17 @@
 #
 ---
 include:
-  - board: cornix_e73
-    shield: cornix_main_left
-    artifact-name: cornix_left
-  - board: cornix_e73
-    shield: cornix_right
+  - board: cornix_dongle
+    shield: cornix_dongle_eyelash dongle_display
+    snippet: studio-rpc-usb-uart
+    artifact-name: cornix_dongle
+
+  - board: cornix_ph_left
+    artifact-name: cornix_left_for_dongle
+
+  - board: cornix_right
     artifact-name: cornix_right
+
+  - board: cornix_e73
+    shield: settings_reset
+    artifact-name: reset
