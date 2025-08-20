@@ -16,6 +16,9 @@ manifest:
     - name: zmk-keyboard-cornix
       remote: cornix-shield
       revision: main
+    - name: zmk-helpers
+      remote: urob
+      revision: main
     - name: zmk-dongle-display
       remote: englmaxi
       revision: main
