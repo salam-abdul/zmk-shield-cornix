@@ -84,7 +84,7 @@
             display-name = "Numbers";
             bindings = <
 &trans  &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3          &kp NUMBER_4           &kp NUMBER_5                  &kp NUMBER_6  &kp NUMBER_7  &kp NUMBER_8  &kp N9        &kp N0     &kp BACKSPACE
-&trans  &trans        &trans        &kp LEFT_PARENTHESIS  &kp RIGHT_PARENTHESIS  &trans                        &kp ASTERISK  &kp NUMBER_4  &kp N5        &kp NUMBER_6  &kp PLUS   &kp EQUAL
+&trans  &trans        &trans        &bhm LGUI LEFT_PARENTHESIS  &bhm LSHFT RIGHT_PARENTHESIS  &trans                        &kp ASTERISK  &bhm RSHFT NUMBER_4  &bhm RGUI N5        &bhm RALT NUMBER_6  &bhm RCTRL PLUS   &kp EQUAL
 &trans  &trans        &trans        &trans                &trans                 &trans        &trans  &trans  &kp SLASH     &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &kp MINUS  &kp PERIOD
 &trans  &trans        &trans        &trans                &trans                 &trans                        &trans        &trans        &trans        &none         &none      &none
             >;
