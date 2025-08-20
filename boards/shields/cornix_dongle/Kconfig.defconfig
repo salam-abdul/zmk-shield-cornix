@@ -1,19 +1,13 @@
 if SHIELD_CORNIX_DONGLE
 
-config ZMK_KEYBOARD_NAME
-    default "Cornix"
-
 config ZMK_SPLIT_ROLE_CENTRAL
     default y
 
 config ZMK_USB
 	default y
-  if ZMK_DISPLAY
 
 config I2C
     default y
-
-endif # ZMK_DISPLAY
 
 if LVGL
 
