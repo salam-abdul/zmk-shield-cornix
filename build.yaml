@@ -1,5 +1,6 @@
 include:
   - board: cornix_dongle
+    shield: cornix_dongle dongle_display
     snippet: studio-rpc-usb-uart
     artifact-name: cornix_dongle
 
