@@ -1,6 +1,5 @@
 include:
-  - board: nice_nano_v2
-    shield: cornix_dongle
+  - board: cornix_dongle
     artifact-name: cornix_dongle
 
   - board: cornix_ph_left
