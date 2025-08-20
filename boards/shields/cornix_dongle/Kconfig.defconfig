@@ -1,5 +1,11 @@
 if SHIELD_CORNIX_DONGLE
 
+config ZMK_SPLIT
+    default Y
+
+config ZMK_KEYBOARD_NAME
+    default "Caldera"
+    
 config ZMK_SPLIT_ROLE_CENTRAL
     default y
 
