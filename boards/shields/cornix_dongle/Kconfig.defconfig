@@ -3,9 +3,6 @@ if SHIELD_CORNIX_DONGLE
 config ZMK_SPLIT
     default y
 
-config ZMK_KEYBOARD_NAME
-    default "Cornix"
-    
 config ZMK_SPLIT_ROLE_CENTRAL
     default y
 
