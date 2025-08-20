@@ -6,21 +6,18 @@ manifest:
       url-base: https://github.com/hitsmaxft
     - name: urob
       url-base: https://github.com/urob
-    - name: englmaxi
-      url-base: https://github.com/englmaxi
   projects:
     - name: zmk
       remote: zmkfirmware
       revision: main
+      clone-depth: 1
       import: app/west.yml
     - name: zmk-keyboard-cornix
       remote: cornix-shield
       revision: main
+      clone-depth: 1
     - name: zmk-helpers
       remote: urob
-      revision: main
-    - name: zmk-dongle-display
-      remote: englmaxi
       revision: main
   self:
     path: config
