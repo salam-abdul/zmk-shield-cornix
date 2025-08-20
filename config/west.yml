@@ -2,10 +2,10 @@ manifest:
   remotes:
     - name: zmkfirmware
       url-base: https://github.com/zmkfirmware
-    - name: cornix-shield
+    - name: hitsmaxft
       url-base: https://github.com/hitsmaxft
-    - name: urob
-      url-base: https://github.com/urob
+    - name: englmaxi
+      url-base: https://github.com/englmaxi
   projects:
     - name: zmk
       remote: zmkfirmware
@@ -14,15 +14,8 @@ manifest:
     - name: zmk-keyboard-cornix
       remote: cornix-shield
       revision: main
-    - name: zmk-helpers
-      remote: urob
-      revision: main
     - name: zmk-dongle-display
-      remote: cornix-shield
-      revision: main
-    - name: zmk-shield-cornix
-      path: zmk-shield-cornix
-      remote: cornix-shield
+      remote: englmaxi
       revision: main
   self:
     path: config

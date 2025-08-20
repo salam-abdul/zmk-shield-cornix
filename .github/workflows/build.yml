@@ -2,9 +2,6 @@ name: Build ZMK firmware
 on:
   workflow_dispatch:
   push:
-    paths:
-      - "boards/*"
-      - "config/*"
 
 jobs:
   build:

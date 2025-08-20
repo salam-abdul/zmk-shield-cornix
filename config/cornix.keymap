@@ -46,7 +46,7 @@
             #binding-cells = <2>;
             bindings = <&kp>, <&kp>;
 
-            flavor = "balanced";
+            flavor = "tap-preferred";
             tapping-term-ms = <HM_TAPPING_TERM>;
             quick-tap-ms = <200>;                // repeat on tap-into-hold
             require-prior-idle-ms = <HM_PRIOR_IDLE>;
@@ -59,7 +59,7 @@
             #binding-cells = <2>;
             bindings = <&kp>, <&kp>;
 
-            flavor = "balanced";
+            flavor = "tap-preferred";
             tapping-term-ms = <HM_TAPPING_TERM>;
             quick-tap-ms = <200>;
             require-prior-idle-ms = <HM_PRIOR_IDLE>;
@@ -75,10 +75,7 @@
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             bindings = <&kp>, <&kp>;
-
-            //flavor = "balanced";
-
-            flavor = "balanced";
+            flavor = "tap-preferred";
             tapping-term-ms = <HM_TAPPING_TERM_FAST>;
             quick-tap-ms = <200>;
             require-prior-idle-ms = <HM_PRIOR_IDLE>;
@@ -117,7 +114,7 @@
             #binding-cells = <2>;
             bindings = <&kp>, <&kp>;
 
-            flavor = "balanced";
+            flavor = "tap-preferred";
             tapping-term-ms = <HM_TAPPING_TERM>;
             quick-tap-ms = <200>;
         };
@@ -142,14 +139,6 @@
 
         default_layer {
             display-name = "Base";
-
-            // ------------------------------------------------------------------------------------------------------------
-            // |   `   |  1  |  2  |  3   |  4   |  5   |                   |  6   |  7    |  8    |  9   |   0   |       |
-            // |  ESC  |  Q  |  W  |  E   |  R   |  T   |                   |  Y   |  U    |  I    |  O   |   P   | BKSPC |
-            // |  TAB  |  A  |  S  |  D   |  F   |  G   |                   |  H   |  J    |  K    |  L   |   ;   |   '   |
-            // | SHIFT |  Z  |  X  |  C   |  V   |  B   |  MUTE  |  |       |  N   |  M    |  ,    |  .   |   /   | SHIFT |
-            //               | GUI | ALT  | CTRL | LOWER|  ENTER |  | SPACE | RAISE| CTRL  | ALT   | GUI  |
-
             bindings = <
 &kp TAB           &kp Q          &kp W             &kp E         &kp R                &kp T                      &kp Y        &kp U                &kp I         &kp O         &kp P             &kp BSLH
 &kp ESC           &hm_l LCTRL A  &hm_l LALT S      &hm_l LGUI D  &hm_shift_l LSHFT F  &kp G                      &kp H        &hm_shift_r RSHFT J  &hm_r RGUI K  &hm_r RALT L  &hm_r RCTRL SEMI  &kp SQT
@@ -160,16 +149,8 @@
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN &inc_dec_kp PG_UP PG_DN>;
         };
 
-        win_layer {
-            display-name = "Windows";
-
-            // ------------------------------------------------------------------------------------------------------------
-            // |   `   |  1  |  2  |  3   |  4   |  5   |                   |  6   |  7    |  8    |  9   |   0   |       |
-            // |  ESC  |  Q  |  W  |  E   |  R   |  T   |                   |  Y   |  U    |  I    |  O   |   P   | BKSPC |
-            // |  TAB  |  A  |  S  |  D   |  F   |  G   |                   |  H   |  J    |  K    |  L   |   ;   |   '   |
-            // | SHIFT |  Z  |  X  |  C   |  V   |  B   |  MUTE  |  |       |  N   |  M    |  ,    |  .   |   /   | SHIFT |
-            //               | GUI | ALT  | CTRL | LOWER|  ENTER |  | SPACE | RAISE| CTRL  | ALT   | GUI  |
-
+        Number_layer {
+            display-name = "Numbers";
             bindings = <
 &trans  &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3          &kp NUMBER_4           &kp NUMBER_5                  &kp NUMBER_6  &kp NUMBER_7  &kp NUMBER_8  &kp N9        &kp N0     &kp BACKSPACE
 &trans  &trans        &trans        &kp LEFT_PARENTHESIS  &kp RIGHT_PARENTHESIS  &trans                        &kp ASTERISK  &kp NUMBER_4  &kp N5        &kp NUMBER_6  &kp PLUS   &kp EQUAL
@@ -182,15 +163,6 @@
 
         Symbol_layer {
             display-name = "Symbols";
-
-            // TODO: Some binds are waiting for shifted keycode support.
-            // -------------------------------
-            // |       |  F1 |  F2 |  F3  |  F4  |  F5  |                   |  F6  |  F7   |  F8   |  F9  |  F10  |  F11  |
-            // |   `   |  1  |  2  |  3   |  4   |  5   |                   |  6   |  7    |  8    |  9   |   0   |  F12  |
-            // |       |  !  |  @  |  #   |  $   |  %   |                   |  ^   |  &    |  *    |  (   |   )   |   |   |
-            // |       |  =  |  -  |  +   |  {   |  }   |        |  |       |  [   |  ]    |  ;    |  :   |   \   |       |
-            //               |     |      |      |      |        |  |       |      |       |       |      |
-
             bindings = <
 &kp GRAVE  &kp EXCL   &kp AT     &kp HASH              &kp DLLR  &kp PRCNT                         &kp CARET          &kp AMPS         &kp ASTRK              &kp LPAR       &kp RPAR        &kp PIPE
 &none      &kp TILDE  &kp SLASH  &kp LEFT_PARENTHESIS  &kp LBRC  &kp LEFT_BRACKET                  &kp RIGHT_BRACKET  &kp RIGHT_BRACE  &kp RIGHT_PARENTHESIS  &kp BACKSLASH  &kp PLUS        &kp EQUAL
@@ -202,15 +174,7 @@
         };
 
         Debug_layer {
-            display-name = "Debug";
-
-            // ----------------------------------------------------------------------------------------------------------------------------
-            // | BTCLR  |  BT1    |  BT2    |   BT3   |   BT4   |   BT5   |                  |      |      |       |      |       |       |
-            // | EXTPWR | BTCLR | RGB_HUI | RGB_SAD | RGB_SAI | RGB_EFF |                  |      |      |       |      |       |       |
-            // |        | RGB_BRD | RGB_BRI |         |         |         |                  |      |      |       |      |       |       |
-            // |        |         |         |         |         |         | RGB_TOG | |      |      |      |       |      |       |       |
-            //                    |         |         |         |         |         | |      |      |      |       |      |
-
+            display-name = "Bluetooth";
             bindings = <
 &bt BT_CLR      &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4                  &none        &none  &none  &none  &none  &none
 &bt BT_CLR_ALL  &none         &none         &none         &none         &none                         &none        &none  &none  &none  &none  &none
