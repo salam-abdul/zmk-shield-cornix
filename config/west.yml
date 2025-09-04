@@ -14,6 +14,7 @@ manifest:
     - name: zmk
       remote: zmkfirmware
       import: app/west.yml
+      revision: main
     - name: zmk-keyboard-cornix
       remote: cornix-shield
       revision: main
