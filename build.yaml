@@ -1,8 +1,6 @@
 include:
-  - board: nice_nano_v2
-    shield: cornix_dongle dongle_display
-    snippet: studio-rpc-usb-uart
-    artifact-name: cornix_dongle
+  - board: seeeduino_xiao_ble
+    shield: cornix_dongle prospector_adapter
 
   - board: cornix_ph_left
     artifact-name: cornix_left_for_dongle

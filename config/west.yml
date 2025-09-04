@@ -8,6 +8,8 @@ manifest:
       url-base: https://github.com/urob
     - name: englmaxi
       url-base: https://github.com/englmaxi
+    - name: carrefinho                            # <--- add this
+      url-base: https://github.com/carrefinho     # <--- and this
   projects:
     - name: zmk
       remote: zmkfirmware
@@ -24,5 +26,8 @@ manifest:
     - name: zmk-dongle-display
       remote: englmaxi
       revision: main
+    - name: prospector-zmk-module                 # <--- and these
+      remote: carrefinho                          # <---
+      revision: main                              # <---
   self:
     path: config
