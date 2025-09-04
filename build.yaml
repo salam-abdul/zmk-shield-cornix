@@ -1,6 +1,6 @@
 include:
   - board: seeeduino_xiao_ble
-    shield: cornix_dongle dongle_screen
+    shield: cornix dongle_screen
     artifact-name: dongle-screen
 
   - board: seeeduino_xiao_ble
@@ -17,4 +17,4 @@ include:
 
   - board: cornix_e73
     shield: settings_reset
-    artifact-name: keyboard-reset
+    artifact-name: reset
