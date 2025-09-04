@@ -8,26 +8,24 @@ manifest:
       url-base: https://github.com/urob
     - name: englmaxi
       url-base: https://github.com/englmaxi
-    - name: carrefinho                            # <--- add this
-      url-base: https://github.com/carrefinho     # <--- and this
+    - name: janpfischer
+      url-base: https://github.com/janpfischer
   projects:
     - name: zmk
       remote: zmkfirmware
-      revision: main
-      clone-depth: 1
+      revision: 0.3.0 # or main if newer than 0.3.0
       import: app/west.yml
     - name: zmk-keyboard-cornix
       remote: cornix-shield
       revision: main
-      clone-depth: 1
     - name: zmk-helpers
       remote: urob
       revision: main
     - name: zmk-dongle-display
       remote: englmaxi
       revision: main
-    - name: prospector-zmk-module                 # <--- and these
-      remote: carrefinho                          # <---
-      revision: main                              # <---
+    - name: zmk-dongle-screen
+      remote: janpfischer
+      revision: main                       
   self:
     path: config
