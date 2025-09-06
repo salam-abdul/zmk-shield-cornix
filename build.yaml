@@ -1,6 +1,6 @@
 include:
   - board: seeeduino_xiao_ble
-    shield: cornix dongle_screen
+    shield: cornix_dongle dongle_screen
     artifact-name: dongle-screen
 
   - board: seeeduino_xiao_ble
@@ -15,6 +15,6 @@ include:
     cmake-args: -DCONFIG_ZMK_SPLIT=y -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=n
     artifact-name: cornix_right
 
-  - board: cornix_e73
+  - board: cornix_right
     shield: settings_reset
     artifact-name: reset
