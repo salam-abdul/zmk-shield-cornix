@@ -1,0 +1,4 @@
+if SHIELD_CALDERA_DONGLE
+    config CONFIG_DONGLE_SCREEN_AMBIENT_LIGHT 
+        default y
+endif
