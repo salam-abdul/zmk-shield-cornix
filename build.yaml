@@ -1,6 +1,6 @@
 include:
   - board: seeeduino_xiao_ble
-    shield: cornix dongle_screen
+    shield: cornix_dongle dongle_screen
     artifact-name: dongle-screen
 
   - board: seeeduino_xiao_ble
