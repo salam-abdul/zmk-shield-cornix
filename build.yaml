@@ -1,6 +1,6 @@
 include:
   - board: seeeduino_xiao_ble
-    shield: cornix_dongle dongle_screen
+    shield: cornix_dongle_eyelash dongle_screen
     cmake-args: -DCONFIG_DONGLE_SCREEN_AMBIENT_LIGHT=y
     artifact-name: dongle-screen
 
