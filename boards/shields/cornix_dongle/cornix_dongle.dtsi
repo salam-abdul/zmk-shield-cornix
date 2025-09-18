@@ -1,10 +1,30 @@
-#include <physical_layouts.dtsi>
-#import "cornix.dtsi"
+#include <dt-bindings/zmk/matrix_transform.h>
 
 / {
     chosen {
         zmk,kscan = &mock_kscan;
-        zmk,physical-layout = &physical_layout0;
+        zmk,matrix-transform = &default_transform;
+        zmk,physical-layout = &layout_50;
+    };
+
+    mock_kscan: kscan_mock {
+        compatible = "zmk,kscan-mock";
+        columns = <14>;
+        rows = <4>;
+        events = <0>;
+    };
+
+    key_physical_attrs: key_physical_attrs {
+        compatible = "zmk,physical-layout-key";
+        width = <100>;
+        height = <100>;
+    };
+
+    physical_layout0: physical_layout0 {
+        compatible = "zmk,physical-layout";
+        display-name = "Default";
+        transform = <&default_transform>;
+        kscan = <&mock_kscan>;
     };
 };
 
@@ -99,9 +119,4 @@
         };
 
     };
-};
-
-
-&physical_layout0 {
-    transform = <&default_transform>;
 };
