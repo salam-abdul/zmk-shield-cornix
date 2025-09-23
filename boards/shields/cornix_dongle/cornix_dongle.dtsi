@@ -16,6 +16,9 @@
 
     key_physical_attrs: key_physical_attrs {
         compatible = "zmk,physical-layout-key";
+        // Number of argument cells each key phandle provides:
+        // width height x y rotation rotation_x rotation_y
+        #key-cells = <7>;
         width = <100>;
         height = <100>;
     };
