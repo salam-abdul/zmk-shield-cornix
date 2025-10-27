@@ -1,19 +1,19 @@
 include:
   - board: seeeduino_xiao_ble
-    shield: cornix_dongle dongle_screen
+    shield: cornix_dongle_adapter dongle_screen dongle_display
     artifact-name: dongle-screen
-    cmake-args: -DCONFIG_DONGLE_SCREEN_AMBIENT_LIGHT=y
+    cmake-args: -DCONFIG_DONGLE_SCREEN_AMBIENT_LIGHT=y††††††
 
   - board: seeeduino_xiao_ble
     shield: settings_reset
     artifact-name: dongle-reset
 
   - board: cornix_ph_left
-    cmake-args: -DCONFIG_ZMK_SLEEP=y -DCONFIG_ZMK_IDLE_TIMEOUT=60000
+    cmake-args: -DCONFIG_ZMK_SLEEP=y -DCONFIG_ZMK_IDLE_TIMEOUT=60000 -DCONFIG_ZMK_SPLIT=y -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=n
     artifact-name: cornix_left_for_dongle
 
   - board: cornix_right
-    cmake-args: -DCONFIG_ZMK_SLEEP=y -DCONFIG_ZMK_IDLE_TIMEOUT=60000
+    cmake-args: -DCONFIG_ZMK_SLEEP=y -DCONFIG_ZMK_IDLE_TIMEOUT=60000 -DCONFIG_ZMK_SPLIT=y -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=n
     artifact-name: cornix_right
 
   - board: cornix_right
