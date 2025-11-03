@@ -69,24 +69,24 @@
         default_layer {
             display-name = "Base";
             bindings = <
-&kp TAB           &kp Q         &kp W             &kp E        &kp R          &kp T                      &kp Y        &kp U         &kp I        &kp O        &kp P            &kp BSLH
-&kp ESC           &bhm LCTRL A  &bhm LALT S       &bhm LGUI D  &bhm LSHFT F   &kp G                      &kp H        &bhm RSHFT J  &bhm RGUI K  &bhm RALT L  &bhm RCTRL SEMI  &kp SQT
-&kp LSHIFT        &kp Z         &kp X             &kp C        &kp V          &kp B        &none  &none  &kp N        &kp M         &kp COMMA    &kp DOT      &kp UP_ARROW     &kp SLASH
-&kp LEFT_CONTROL  &kp LEFT_ALT  &kp LEFT_COMMAND  &kp DEL      &kp BACKSPACE  &lt 1 SPACE                &lt 2 SPACE  &kp ENTER     &lt 3 F13    &kp LEFT     &kp DOWN_ARROW   &kp RIGHT
+&kp TAB           &kp Q         &kp W             &kp E        &kp R          &kp T                          &kp Y        &kp U         &kp I        &kp O        &kp P            &kp BSLH
+&kp ESC           &bhm LCTRL A  &bhm LALT S       &bhm LGUI D  &bhm LSHFT F   &kp G                          &kp H        &bhm RSHFT J  &bhm RGUI K  &bhm RALT L  &bhm RCTRL SEMI  &kp SQT
+&kp LSHIFT        &kp Z         &kp X             &kp C        &kp V          &kp B        &kp F23  &kp F24  &kp N        &kp M         &kp COMMA    &kp DOT      &kp UP_ARROW     &kp SLASH
+&kp LEFT_CONTROL  &kp LEFT_ALT  &kp LEFT_COMMAND  &kp DEL      &kp BACKSPACE  &lt 1 SPACE                    &lt 2 SPACE  &kp ENTER     &lt 3 F13    &kp LEFT     &kp DOWN_ARROW   &kp RIGHT
             >;
 
             sensor-bindings =
-                <&inc_dec_kp C_VOLUME_DOWN C_VOLUME_UP>,
+                <&inc_dec_kp C_VOLUME_UP C_VOLUME_DOWN>,
                 <&inc_dec_kp PG_UP PG_DN>;
         };
 
         Number_layer {
             display-name = "Numbers";
             bindings = <
-&trans  &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3          &kp NUMBER_4           &kp NUMBER_5                  &kp NUMBER_6  &kp NUMBER_7  &kp NUMBER_8  &kp N9        &kp N0     &kp BACKSPACE
-&trans  &trans        &trans        &bhm LGUI LEFT_PARENTHESIS  &bhm LSHFT RIGHT_PARENTHESIS  &trans                        &kp ASTERISK  &bhm RSHFT NUMBER_4  &bhm RGUI N5        &bhm RALT NUMBER_6  &bhm RCTRL PLUS   &kp EQUAL
-&trans  &trans        &trans        &trans                &trans                 &trans        &trans  &trans  &kp SLASH     &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &kp MINUS  &kp PERIOD
-&trans  &trans        &trans        &trans                &trans                 &trans                        &trans        &trans        &trans        &none         &none      &none
+&trans  &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3                &kp NUMBER_4                  &kp NUMBER_5                  &kp NUMBER_6  &kp NUMBER_7         &kp NUMBER_8  &kp N9              &kp N0           &kp BACKSPACE
+&trans  &trans        &trans        &bhm LGUI LEFT_PARENTHESIS  &bhm LSHFT RIGHT_PARENTHESIS  &trans                        &kp ASTERISK  &bhm RSHFT NUMBER_4  &bhm RGUI N5  &bhm RALT NUMBER_6  &bhm RCTRL PLUS  &kp EQUAL
+&trans  &trans        &trans        &trans                      &trans                        &trans        &trans  &trans  &kp SLASH     &kp NUMBER_1         &kp NUMBER_2  &kp NUMBER_3        &kp MINUS        &kp PERIOD
+&trans  &trans        &trans        &trans                      &trans                        &trans                        &trans        &trans               &trans        &none               &none            &none
             >;
 
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN &inc_dec_kp PG_UP PG_DN>;
