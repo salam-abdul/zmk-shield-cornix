@@ -1,0 +1,6 @@
+if BOARD_CORNIX_RIGHT_NRF52840_ZMK
+
+config ZMK_BOARD_COMPAT
+	default y
+
+endif
