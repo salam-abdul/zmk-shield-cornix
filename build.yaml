@@ -6,7 +6,7 @@ include:
   #   shield: cornix_dongle_adapter dongle_screen
   #   artifact-name: dongle-screen
 
-  - board: seeeduino_xiao_ble//zmk
+  - board: xiao_ble//zmk
     shield: settings_reset
     artifact-name: dongle-reset
 
