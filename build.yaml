@@ -1,18 +1,21 @@
 include:
-  - board: seeeduino_xiao_ble
-    shield: cornix_dongle_adapter dongle_screen
-    artifact-name: dongle-screen
+  # dongle-screen disabled: zmk-dongle-screen uses LV_DISP_DEF_REFR_PERIOD which
+  # was removed in LVGL 9 (Zephyr 4.1) and causes Kconfig errors on all builds.
+  # Re-enable when janpfischer/zmk-dongle-screen is updated for Zephyr 4.1.
+  # - board: seeeduino_xiao_ble//zmk
+  #   shield: cornix_dongle_adapter dongle_screen
+  #   artifact-name: dongle-screen
 
-  - board: seeeduino_xiao_ble
+  - board: seeeduino_xiao_ble//zmk
     shield: settings_reset
     artifact-name: dongle-reset
 
-  - board: cornix_ph_left
+  - board: cornix_ph_left//zmk
     artifact-name: cornix_left_for_dongle
 
-  - board: cornix_right
+  - board: cornix_right//zmk
     artifact-name: cornix_right
 
-  - board: cornix_right
+  - board: cornix_right//zmk
     shield: settings_reset
     artifact-name: reset

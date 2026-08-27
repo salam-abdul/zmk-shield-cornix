@@ -6,8 +6,6 @@ manifest:
       url-base: https://github.com/hitsmaxft
     - name: urob
       url-base: https://github.com/urob
-    - name: janpfischer
-      url-base: https://github.com/janpfischer
   projects:
     - name: zmk
       remote: zmkfirmware
@@ -19,8 +17,5 @@ manifest:
     - name: zmk-helpers
       remote: urob
       revision: main
-    - name: zmk-dongle-screen
-      remote: janpfischer
-      revision: main                       
   self:
     path: config
