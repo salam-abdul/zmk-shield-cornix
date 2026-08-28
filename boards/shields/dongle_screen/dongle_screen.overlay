@@ -101,16 +101,12 @@
    cs-gpios = <&xiao_d 9 GPIO_ACTIVE_LOW>;
 };
 
-&i2c0 {
-   status = "okay";
-
-   apds9960: apds9960@39 {
-       compatible = "avago,apds9960";
-       status = "okay";
-       reg = <0x39>;
-       int-gpios = <&xiao_d 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-   };
-};
+/*
+ * The APDS9960 ambient-light sensor (optional, CONFIG_DONGLE_SCREEN_AMBIENT_LIGHT,
+ * default n) is intentionally omitted: enabling &i2c0 on the Zephyr 4.1 xiao_ble
+ * requires an explicit pinctrl, and the display does not need it. Re-add &i2c0
+ * (with pinctrl-0/pinctrl-names) plus the apds9960 node if you enable that option.
+ */
 
 &pwm1 {
   status = "okay";
