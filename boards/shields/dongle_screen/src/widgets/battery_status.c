@@ -43,7 +43,7 @@ struct battery_object {
 // LVGL 9 canvas buffers must be raw byte buffers sized for the color format
 // and stride, not lv_color_t arrays. 102x5 @ 16bpp (RGB565), 4-byte stride.
 static uint8_t battery_image_buffer[ZMK_SPLIT_CENTRAL_PERIPHERAL_COUNT + SOURCE_OFFSET]
-                                   [LV_CANVAS_BUF_SIZE(102, 5, 16, 4)];
+                                   [LV_CANVAS_BUF_SIZE(102, 5, 16, 4)] __aligned(4);
 
 // Peripheral reconnection tracking
 // ZMK sends battery events with level < 1 when peripherals disconnect

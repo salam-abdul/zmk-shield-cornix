@@ -33,15 +33,23 @@
           reg = <0>;
           mipi-max-frequency = <31000000>;
           mipi-mode = "MIPI_DBI_MODE_SPI_4WIRE";
-          width = <240>;
-          height = <280>;
-          x-offset = <0>;
-          y-offset = <20>;
+          /*
+           * Landscape rotation baked into MADCTL. The stock Zephyr 4.1 st7789v
+           * driver cannot set_orientation at runtime (returns -ENOTSUP for
+           * anything but NORMAL), so the old runtime rotation is gone. The
+           * 240x280 portrait panel sits at rows 20..299 of the 240x320 GRAM;
+           * mdac MV (0x20) swaps axes -> 280x240 landscape, moving the 20px
+           * margin onto the x axis. If the image is upside-down, use 0xA0.
+           */
+          width = <280>;
+          height = <240>;
+          x-offset = <20>;
+          y-offset = <0>;
           vcom = <0x19>;
           gctrl = <0x35>;
           vrhs = <0x12>;
           vdvs = <0x20>;
-          mdac = <0x00>;
+          mdac = <0x60>;   /* MV | MX -> 90° landscape (use 0xA0 for flipped) */
           gamma = <0x01>;
           colmod = <0x05>;
           lcm = <0x2c>;
