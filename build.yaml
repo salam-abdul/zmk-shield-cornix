@@ -1,15 +1,16 @@
 include:
-  # dongle-screen disabled: zmk-dongle-screen uses LV_DISP_DEF_REFR_PERIOD which
-  # was removed in LVGL 9 (Zephyr 4.1) and causes Kconfig errors on all builds.
-  # zmk-dongle-display (englmaxi) is Zephyr 4.1 compatible but targets monochrome
-  # I2C OLEDs, not the xiao_ble's color ST7789 SPI display.
-  # Re-enable dongle display once a Zephyr 4.1-compatible color TFT shield exists.
-  # - board: xiao_ble//zmk
-  #   shield: cornix_dongle_adapter dongle_screen
-  #   artifact-name: dongle-screen
+  # Dongle WITH the color TFT status screen. dongle_screen is vendored into this
+  # repo (boards/shields/dongle_screen) and ported to Zephyr 4.1 / LVGL 9:
+  # stock MIPI-DBI st7789v driver + stock LVGL glue, LVGL 9 canvas/Kconfig fixes.
+  - board: xiao_ble//zmk
+    shield: cornix_dongle_adapter dongle_screen
+    artifact-name: dongle-screen
 
+  # Display-less dongle fallback: cornix_dongle_adapter forces CONFIG_ZMK_DISPLAY=y,
+  # so override it off here (per-build, not shield-wide, so dongle-screen keeps it).
   - board: xiao_ble//zmk
     shield: cornix_dongle_adapter
+    cmake-args: -DCONFIG_ZMK_DISPLAY=n
     artifact-name: dongle
 
   - board: xiao_ble//zmk
