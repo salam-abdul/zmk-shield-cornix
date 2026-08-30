@@ -1,20 +1,29 @@
 include:
+  # All xiao_ble//zmk (dongle) builds use the nrf52840-nosd snippet: this XIAO's
+  # UF2 bootloader reports "SoftDevice: not found", so it forwards execution to
+  # 0x1000. Firmware must be linked there, not at the default 0x27000 (the
+  # with-SoftDevice offset) - otherwise the app never runs (no USB, dark screen).
+  # The cornix half boards below are NOT XIAO and keep their own bootloaders.
+
   # Dongle WITH the color TFT status screen. dongle_screen is vendored into this
   # repo (boards/shields/dongle_screen) and ported to Zephyr 4.1 / LVGL 9:
   # stock MIPI-DBI st7789v driver + stock LVGL glue, LVGL 9 canvas/Kconfig fixes.
   - board: xiao_ble//zmk
     shield: cornix_dongle_adapter dongle_screen
+    snippet: nrf52840-nosd
     artifact-name: dongle-screen
 
   # Display-less dongle fallback: cornix_dongle_adapter forces CONFIG_ZMK_DISPLAY=y,
   # so override it off here (per-build, not shield-wide, so dongle-screen keeps it).
   - board: xiao_ble//zmk
     shield: cornix_dongle_adapter
+    snippet: nrf52840-nosd
     cmake-args: -DCONFIG_ZMK_DISPLAY=n
     artifact-name: dongle
 
   - board: xiao_ble//zmk
     shield: settings_reset
+    snippet: nrf52840-nosd
     artifact-name: dongle-reset
 
   - board: cornix_ph_left//zmk
