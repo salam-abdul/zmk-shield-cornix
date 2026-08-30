@@ -6,14 +6,6 @@ include:
     shield: cornix_dongle_adapter dongle_screen
     artifact-name: dongle-screen
 
-  # Debug variant: same as dongle-screen but with ZMK USB logging. Flash this,
-  # open the CDC-ACM serial port it exposes, and capture the boot log to see
-  # where display/backlight bring-up fails. Remove once the screen works.
-  - board: xiao_ble//zmk
-    shield: cornix_dongle_adapter dongle_screen
-    cmake-args: -DCONFIG_ZMK_USB_LOGGING=y
-    artifact-name: dongle-screen-debug
-
   # Display-less dongle fallback: cornix_dongle_adapter forces CONFIG_ZMK_DISPLAY=y,
   # so override it off here (per-build, not shield-wide, so dongle-screen keeps it).
   - board: xiao_ble//zmk
