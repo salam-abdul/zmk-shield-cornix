@@ -31,7 +31,7 @@ endchoice
 # then the firmware dies before USB enumerates. Give it generous headroom (RAM is
 # ~45% after the VDB fix).
 config ZMK_DISPLAY_DEDICATED_THREAD_STACK_SIZE
-    default 16384
+    default 32768
 
 choice ST7789V_PIXEL_FORMAT
 	default ST7789V_RGB565
