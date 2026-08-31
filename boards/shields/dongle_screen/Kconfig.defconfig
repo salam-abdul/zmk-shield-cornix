@@ -25,8 +25,13 @@ choice ZMK_DISPLAY_WORK_QUEUE
     default ZMK_DISPLAY_WORK_QUEUE_DEDICATED
 endchoice
 
+# LVGL 9.3's rendering pipeline is much more stack-hungry than the LVGL 8 this
+# shield was written for. 4096 overflows the display render thread; with HW stack
+# protection (MPU guard) that faults instantly at boot - panel powers on (static)
+# then the firmware dies before USB enumerates. Give it generous headroom (RAM is
+# ~45% after the VDB fix).
 config ZMK_DISPLAY_DEDICATED_THREAD_STACK_SIZE
-    default 4096
+    default 16384
 
 choice ST7789V_PIXEL_FORMAT
 	default ST7789V_RGB565
