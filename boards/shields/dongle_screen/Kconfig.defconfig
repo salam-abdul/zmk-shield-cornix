@@ -32,8 +32,14 @@ choice ST7789V_PIXEL_FORMAT
 	default ST7789V_RGB565
 endchoice
 
+# Partial framebuffer (~16% of the screen), NOT a full 100% one. At 280x240x16bpp
+# a full VDB is 134 KB = 52% of the nRF52840's 256 KB RAM; combined with the cornix
+# dongle's heavy BLE stack (BT_MAX_CONN=7, split-central, pointing, Studio) that
+# pushes static RAM to ~88% and the firmware runs out of memory at boot (panel
+# powers on -> static -> faults before USB enumerates). 16% is ~21 KB and renders
+# the status screen fine.
 config LV_Z_VDB_SIZE
-    default 100
+    default 16
 
 config LV_Z_MEM_POOL_SIZE
     default 10000
