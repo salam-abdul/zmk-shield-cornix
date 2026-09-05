@@ -1,74 +1,74 @@
+/*
+ * Copyright (c) 2024 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
 #include <zmk/hid.h>
 #include <lvgl.h>
 #include "mod_status.h"
-#include <fonts.h> // <-- Wichtig für LV_FONT_DECLARE
 
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
-static void update_mod_status(struct zmk_widget_mod_status *widget)
-{
-    uint8_t mods = zmk_hid_get_keyboard_report()->body.modifiers;
-    char text[32] = "";
-    int idx = 0;
+// Rebuilt for LVGL 9.3 / Zephyr 4.1:
+//  - bare label (no lv_obj container, which faults during render under 9.3),
+//  - built-in montserrat font (the vendored NerdFonts_40 no longer renders),
+//  - readable text modifier names instead of Nerd-Font glyph icons,
+//  - polled from an lv_timer (runs in the LVGL task context) rather than a
+//    Zephyr k_timer ISR, so lv_label_set_text is called safely.
 
-    // Temporäre Puffer für Symbole
-    char *syms[4];
+static struct zmk_widget_mod_status *active_widget = NULL;
+
+static void update_mod_status(struct zmk_widget_mod_status *widget) {
+    uint8_t mods = zmk_hid_get_keyboard_report()->body.modifiers;
+    const char *names[4];
     int n = 0;
 
-    if (mods & (MOD_LCTL | MOD_RCTL))
-        syms[n++] = "󰘴";
-    if (mods & (MOD_LSFT | MOD_RSFT))
-        syms[n++] = "󰘶"; // U+F0636
-    if (mods & (MOD_LALT | MOD_RALT))
-        syms[n++] = "󰘵"; // U+F0635
-    if (mods & (MOD_LGUI | MOD_RGUI))
-    // set next syms according to CONFIG_DONGLE_SCREEN_SYSTEM (0,1,2)
-#if CONFIG_DONGLE_SCREEN_SYSTEM_ICON == 1
-        syms[n++] = "󰌽"; // U+DF3D
-#elif CONFIG_DONGLE_SCREEN_SYSTEM_ICON == 2
-        syms[n++] = ""; // U+E62A
-#else
-        syms[n++] = "󰘳"; // U+F0633
-#endif
-
-    for (int i = 0; i < n; ++i)
-    {
-        if (i > 0)
-            idx += snprintf(&text[idx], sizeof(text) - idx, " ");
-        idx += snprintf(&text[idx], sizeof(text) - idx, "%s", syms[i]);
+    if (mods & (MOD_LCTL | MOD_RCTL)) {
+        names[n++] = "Ctrl";
+    }
+    if (mods & (MOD_LSFT | MOD_RSFT)) {
+        names[n++] = "Shift";
+    }
+    if (mods & (MOD_LALT | MOD_RALT)) {
+        names[n++] = "Alt";
+    }
+    if (mods & (MOD_LGUI | MOD_RGUI)) {
+        names[n++] = "Gui";
     }
 
-    lv_label_set_text(widget->label, idx ? text : "");
+    char text[48] = "";
+    int idx = 0;
+    for (int i = 0; i < n; ++i) {
+        idx += snprintf(&text[idx], sizeof(text) - idx, "%s%s", i ? "  " : "", names[i]);
+    }
+
+    lv_label_set_text(widget->label, text);
 }
 
-static void mod_status_timer_cb(struct k_timer *timer)
-{
-    struct zmk_widget_mod_status *widget = k_timer_user_data_get(timer);
-    update_mod_status(widget);
+static void mod_status_timer_cb(lv_timer_t *timer) {
+    ARG_UNUSED(timer);
+    if (active_widget != NULL) {
+        update_mod_status(active_widget);
+    }
 }
 
-static struct k_timer mod_status_timer;
+int zmk_widget_mod_status_init(struct zmk_widget_mod_status *widget, lv_obj_t *parent) {
+    widget->obj = lv_label_create(parent);
+    widget->label = widget->obj;
 
-int zmk_widget_mod_status_init(struct zmk_widget_mod_status *widget, lv_obj_t *parent)
-{
-    widget->obj = lv_obj_create(parent);
-    lv_obj_set_size(widget->obj, 180, 40);
+    lv_obj_set_style_text_font(widget->obj, &lv_font_montserrat_20, 0);
+    lv_obj_set_style_text_color(widget->obj, lv_palette_main(LV_PALETTE_CYAN), 0);
+    lv_label_set_text(widget->obj, "");
 
-    widget->label = lv_label_create(widget->obj);
-    lv_obj_align(widget->label, LV_ALIGN_CENTER, 0, 0);
-    lv_label_set_text(widget->label, "-");
-    lv_obj_set_style_text_font(widget->label, &NerdFonts_Regular_40, 0); // <-- NerdFont setzen
-
-    k_timer_init(&mod_status_timer, mod_status_timer_cb, NULL);
-    k_timer_user_data_set(&mod_status_timer, widget);
-    k_timer_start(&mod_status_timer, K_MSEC(100), K_MSEC(100));
+    active_widget = widget;
+    lv_timer_create(mod_status_timer_cb, 100, NULL);
 
     return 0;
 }
 
-lv_obj_t *zmk_widget_mod_status_obj(struct zmk_widget_mod_status *widget)
-{
+lv_obj_t *zmk_widget_mod_status_obj(struct zmk_widget_mod_status *widget) {
     return widget->obj;
 }

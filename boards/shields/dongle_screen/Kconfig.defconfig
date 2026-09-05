@@ -150,13 +150,9 @@ config DONGLE_SCREEN_WPM_ACTIVE
     help
       If the WPM Widget should be active or not
 
-# Disabled: the modifier widget renders with the vendored LVGL-8 NerdFonts_40,
-# which faults under LVGL 9.3 at boot (panel powers on -> static -> no USB). Not
-# needed for this build (battery + layer only). Re-enable once the NerdFonts are
-# regenerated for LVGL 9.
 config DONGLE_SCREEN_MODIFIER_ACTIVE
     bool "Modifier Widget active"
-    default n
+    default y
     help
       If the Modifier Widget should be active or not
 
