@@ -34,4 +34,8 @@ include:
 
   - board: cornix_right//zmk
     shield: settings_reset
-    artifact-name: reset
+    artifact-name: reset-right
+
+  - board: cornix_ph_left//zmk
+    shield: settings_reset
+    artifact-name: reset-left
