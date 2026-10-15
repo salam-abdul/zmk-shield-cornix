@@ -10,12 +10,12 @@ manifest:
     - name: zmk
       remote: zmkfirmware
       import: app/west.yml
-      revision: main
+      revision: 641514a97db345f499dd50b0360e594270f008fe
     - name: zmk-keyboard-cornix
       remote: cornix-shield
-      revision: main
+      revision: b2d5712fa3ef43ccbb796d3df1d48b78d59d27df
     - name: zmk-helpers
       remote: urob
-      revision: main
+      revision: 95edb8f15ef1d1bd8332810555f8cf5837fbdd27
   self:
     path: config

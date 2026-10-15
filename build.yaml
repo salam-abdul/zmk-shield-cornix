@@ -39,3 +39,18 @@ include:
   - board: cornix_ph_left//zmk
     shield: settings_reset
     artifact-name: reset-left
+
+  # Optional A/B test: modest increase on the halves (dongle already uses +8).
+  - board: cornix_ph_left//zmk
+    cmake-args: -DCONFIG_BT_CTLR_TX_PWR_PLUS_4=y
+    artifact-name: cornix_left_for_dongle-radio4
+
+  - board: cornix_right//zmk
+    cmake-args: -DCONFIG_BT_CTLR_TX_PWR_PLUS_4=y
+    artifact-name: cornix_right-radio4
+
+  # Diagnostic USB serial logs; normal dongle-screen remains available above.
+  - board: xiao_ble//zmk
+    shield: cornix_dongle_adapter dongle_screen
+    snippet: nrf52840-nosd zmk-usb-logging
+    artifact-name: dongle-screen-logging
