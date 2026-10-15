@@ -137,8 +137,13 @@ jobs:
       - name: Apply split reconnect fix
         working-directory: ${{ env.base_dir }}/zmk
         run: |
-          git apply --check "${GITHUB_WORKSPACE}/patches/0001-split-retry-failed-scan.patch"
-          git apply "${GITHUB_WORKSPACE}/patches/0001-split-retry-failed-scan.patch"
+          patch="${GITHUB_WORKSPACE}/patches/0001-split-retry-failed-scan.patch"
+          if git apply --reverse --check "$patch" 2>/dev/null; then
+            echo "Split reconnect patch already present in cached checkout"
+          else
+            git apply --check "$patch"
+            git apply "$patch"
+          fi
 
       - name: Check ZMK revision
         working-directory: ${{ env.base_dir }}

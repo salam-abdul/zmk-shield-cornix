@@ -1,0 +1,75 @@
+Cornix reconnect investigation and test procedure
+
+Finding
+The September 5 working build uses ZMK 641514a, Cornix b2d5712, and helpers
+95edb8f. These exact dependencies are now pinned, including ZMK's imported
+Zephyr version (which already contains a controller prepare-pipeline fix).
+The dongle already transmits at +8 dBm. Both halves transmit at 0 dBm.
+
+The pinned ZMK split central marks is_scanning true before bt_le_scan_start.
+If that call fails, it never clears the flag, so later scan requests return
+without attempting recovery. The patch clears it and schedules a retry after
+one second. An already-active scanner (-EALREADY) counts as success. Retries
+respect disabled transport and fully connected guards; success cancels retries.
+This repairs a verified software defect, but logs/hardware testing are still
+needed to establish whether it explains the user's failures.
+
+Builds
+Use the checked-in GitHub Actions workflow. It applies the patch after west
+update; it checks for an already-applied patch when restoring the build cache.
+For manual west builds, apply patches/0001-split-retry-failed-scan.patch from
+the root of the pinned zmk checkout before building. Merely running west update
+and west build without that patch does NOT include the reconnect fix.
+Every CI image includes a matching .config and frozen dependency manifest.
+The patch is also archived. Keep these files with the UF2.
+
+Start with one change
+1. Keep the existing halves and their bonds. Flash ONLY dongle-screen.uf2 to
+   the XIAO dongle, using the usual bootloader procedure. Do not flash a reset
+   image as part of this test. This patch does not change GATT services or keys.
+2. Verify typing, layers, battery, and modifier labels on the existing display.
+3. Turn one half off, wait at least 10 seconds, then turn it back on. It should
+   recover without replugging the dongle. Repeat with the other half, then both.
+   Repeat 10 times and include a Mac sleep/wake cycle. Record failures and times.
+4. Compare the usual hub/dock setup with a direct Mac connection. If possible,
+   use a short USB extension to move the dongle away from the hub/USB 3 cables.
+   Keep placement constant when comparing firmware; change one variable at a time.
+
+Optional radio test
+If drops persist, flash cornix_left_for_dongle-radio4.uf2 to the left half and
+cornix_right-radio4.uf2 to the right half. These change only TX power to +4 dBm
+on the halves; the dongle stays at +8 dBm. Increased power can improve a weak
+return link, but cannot repair a deadlock or USB fault and may affect battery
+runtime. Regular half images restore the previous 0 dBm configuration.
+
+Diagnosing a remaining failure
+Use dongle-screen-logging.uf2 on the dongle for USB serial logging. A serial
+terminal should expose a new /dev/cu.usbmodem* device on macOS. Capture logs
+through a disconnect, including lines mentioning Disconnected, Scanning failed
+to start, Connected, GATT discovery/subscription, queue errors, or fatal faults.
+USB logs can stop when USB itself fails, so absence of logs is not proof of a
+Bluetooth failure. The logging image changes USB descriptors/timing; use the
+normal image for the initial comparison.
+
+At the moment typing stops, check whether a layer key changes the display and
+whether macOS still lists Cornix Dongle with: ioreg -p IOUSB | grep -i cornix
+Battery percentages can be stale: this display derives status from battery
+events and does not independently prove that key notifications are subscribed.
+If the dongle remains on USB but its layer never changes, the split key path or
+dongle processing is stuck. If it disappears from USB, investigate a device
+reset/fault, cable, hub power, and USB recovery as well. Neither observation
+alone identifies a definitive cause.
+
+Rollback
+The previous successful run is 33939327936 (commit 7ddc965e). A local copy of
+its UF2 files is saved outside Git in ../.build/cornix-reliability/baseline/.
+Restore its dongle-screen.uf2 on the dongle if needed. No hardware is flashed
+automatically by this investigation.
+
+Validation
+A host C regression harness compiles the real patched start_scanning function
+and retry callback with a fake Bluetooth stack. Run:
+python3 tests/test_scan_retry.py /path/to/patched/zmk/app/src/split/bluetooth/central.c
+It checks repeated failures, later recovery, already-active scanning, disabled
+transport, and fully connected guards. CI separately compiles the actual Zephyr
+firmware. Hardware reconnect endurance remains a user test.
