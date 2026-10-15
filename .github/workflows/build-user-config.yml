@@ -232,7 +232,7 @@ jobs:
         working-directory: ${{ env.base_dir }}
         run: |
           cp "${{ env.build_dir }}/zephyr/.config" "${{ env.build_dir }}/artifacts/${{ env.artifact_name }}.config"
-          west manifest --freeze > "${{ env.build_dir }}/artifacts/${{ env.artifact_name }}-dependencies.yml"
+          west manifest --freeze --active-only > "${{ env.build_dir }}/artifacts/${{ env.artifact_name }}-dependencies.yml"
           cp "${GITHUB_WORKSPACE}/patches/0001-split-retry-failed-scan.patch" "${{ env.build_dir }}/artifacts/"
 
       - name: Archive (${{ env.display_name }})
