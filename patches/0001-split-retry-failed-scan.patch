@@ -1,11 +1,14 @@
 --- a/app/src/split/bluetooth/central.c
 +++ b/app/src/split/bluetooth/central.c
-@@ -35,6 +35,14 @@
+@@ -35,6 +35,17 @@
  #include <zmk/physical_layouts.h>
  
  static int start_scanning(void);
 +
-+// A failed scan start must not permanently disable split reconnection.
++// Retries share scan operations with Bluetooth callbacks. Never wait on this
++// mutex in a callback: the current operation may itself be waiting for HCI.
++static K_MUTEX_DEFINE(scan_mutex);
++
 +static void retry_scanning_work_cb(struct k_work *work) {
 +    ARG_UNUSED(work);
 +    start_scanning();
@@ -15,20 +18,127 @@
  
  #define POSITION_STATE_DATA_LEN 16
  
-@@ -910,11 +918,14 @@
-     // Start scanning otherwise.
+@@ -781,20 +792,33 @@
+     start_scanning();
+ }
+ 
+-static int stop_scanning(void) {
+-    LOG_DBG("Stopping peripheral scanning");
++// Caller holds scan_mutex. Zephyr clears the explicit scan user and callback
++// even when updating the controller fails.
++static int stop_scanning_locked(void) {
+     is_scanning = false;
+-
+     int err = bt_le_scan_stop();
+     if (err < 0) {
+-        LOG_ERR("Stop LE scan failed (err %d)", err);
++        LOG_ERR("Stop LE scan failed (err %d), retrying in 1 second", err);
++        k_work_reschedule(&retry_scanning_work, K_SECONDS(1));
++    }
++    return err;
++}
++
++static int stop_scanning(void) {
++    int err = k_mutex_lock(&scan_mutex, K_NO_WAIT);
++    if (err < 0) {
++        k_work_reschedule(&retry_scanning_work, K_SECONDS(1));
+         return err;
+     }
+-
+-    return 0;
++    err = stop_scanning_locked();
++    k_mutex_unlock(&scan_mutex);
++    return err;
+ }
+ 
+ static bool split_central_eir_found(const bt_addr_le_t *addr) {
++    if (!is_enabled) {
++        return false;
++    }
+     LOG_DBG("Found the split service");
+ 
+     // Reserve peripheral slot. Once the central has bonded to its peripherals,
+@@ -810,6 +834,7 @@
+     // Stop scanning so we can connect to the peripheral device.
+     int err = stop_scanning();
+     if (err < 0) {
++        release_peripheral_slot(slot_idx);
+         return false;
+     }
+ 
+@@ -883,40 +908,52 @@
+ }
+ 
+ static int start_scanning(void) {
++    int err = k_mutex_lock(&scan_mutex, K_NO_WAIT);
++    if (err < 0) {
++        k_work_reschedule(&retry_scanning_work, K_SECONDS(1));
++        return err;
++    }
++
+     if (!is_enabled) {
+-        LOG_DBG("Not scanning, we're disabled");
+-        return 0;
+-    }
+-
+-    // No action is necessary if central is already scanning.
++        // Complete a disable that overlapped another scan operation.
++        err = stop_scanning_locked();
++        goto out;
++    }
+     if (is_scanning) {
+-        LOG_DBG("Scanning already running");
+-        return 0;
+-    }
+-
+-    // If all the devices are connected, there is no need to scan.
++        goto out;
++    }
++
+     bool has_unconnected = false;
+     for (int i = 0; i < CONFIG_ZMK_SPLIT_BLE_CENTRAL_PERIPHERALS; i++) {
++        // Do not undo the stop preceding bt_conn_le_create(). Connection
++        // completion or failure requests scanning again.
++        if (peripherals[i].state == PERIPHERAL_SLOT_STATE_CONNECTING) {
++            goto out;
++        }
+         if (peripherals[i].conn == NULL) {
+             has_unconnected = true;
+-            break;
+         }
+     }
+     if (!has_unconnected) {
+-        LOG_DBG("All devices are connected, scanning is unnecessary");
+-        return 0;
+-    }
+-
+-    // Start scanning otherwise.
++        goto out;
++    }
++
      is_scanning = true;
-     int err = bt_le_scan_start(BT_LE_SCAN_PASSIVE, split_central_device_found);
+-    int err = bt_le_scan_start(BT_LE_SCAN_PASSIVE, split_central_device_found);
 -    if (err < 0) {
 -        LOG_ERR("Scanning failed to start (err %d)", err);
+-        return err;
+-    }
+-
++    err = bt_le_scan_start(BT_LE_SCAN_PASSIVE, split_central_device_found);
 +    if (err < 0 && err != -EALREADY) {
 +        is_scanning = false;
 +        LOG_ERR("Scanning failed to start (err %d), retrying in 1 second", err);
 +        k_work_reschedule(&retry_scanning_work, K_SECONDS(1));
-         return err;
-     }
- 
-+    k_work_cancel_delayable(&retry_scanning_work);
++        goto out;
++    }
++    err = 0;
      LOG_DBG("Scanning successfully started");
-     return 0;
+-    return 0;
++
++out:
++    // Do not cancel work another caller scheduled while we held the mutex.
++    // A redundant retry rechecks transport, scanning, and connection state.
++    k_mutex_unlock(&scan_mutex);
++    return err;
  }
+ 
+ static void split_central_connected(struct bt_conn *conn, uint8_t conn_err) {

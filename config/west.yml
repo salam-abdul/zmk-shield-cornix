@@ -11,6 +11,31 @@ manifest:
       remote: zmkfirmware
       import: app/west.yml
       revision: 641514a97db345f499dd50b0360e594270f008fe
+    # Override ZMK's floating v4.1.0+zmk-fixes branch with the exact
+    # controller revision from successful build 33939327936.
+    - name: zephyr
+      remote: zmkfirmware
+      revision: 10ba6d0cb38bc3d258775d27982f707599320085
+      clone-depth: 1
+      import:
+        name-blocklist:
+          - ci-tools
+          - hal_altera
+          - hal_cypress
+          - hal_infineon
+          - hal_microchip
+          - hal_nxp
+          - hal_openisa
+          - hal_xtensa
+          - hal_st
+          - hal_ti
+          - loramac-node
+          - mcuboot
+          - mcumgr
+          - net-tools
+          - openthread
+          - edtt
+          - trusted-firmware-m
     - name: zmk-keyboard-cornix
       remote: cornix-shield
       revision: b2d5712fa3ef43ccbb796d3df1d48b78d59d27df

@@ -10,13 +10,16 @@ The pinned ZMK split central marks is_scanning true before bt_le_scan_start.
 If that call fails, it never clears the flag, so later scan requests return
 without attempting recovery. The patch clears it and schedules a retry after
 one second. An already-active scanner (-EALREADY) counts as success. Retries
-respect disabled transport and fully connected guards; success cancels retries.
+respect disabled transport, connecting slots, and fully connected guards.
+Scan start/stop use a nonblocking mutex; pending retries also finish a disable
+that overlapped another operation. Redundant retries recheck current state.
 This repairs a verified software defect, but logs/hardware testing are still
 needed to establish whether it explains the user's failures.
 
 Builds
-Use the checked-in GitHub Actions workflow. It applies the patch after west
-update; it checks for an already-applied patch when restoring the build cache.
+Use the checked-in GitHub Actions workflow. It restores only the patched ZMK source
+file in the CI dependency cache before west update, then applies the current
+patch. This also handles caches containing an earlier version of the patch.
 For manual west builds, apply patches/0001-split-retry-failed-scan.patch from
 the root of the pinned zmk checkout before building. Merely running west update
 and west build without that patch does NOT include the reconnect fix.
@@ -67,9 +70,11 @@ Restore its dongle-screen.uf2 on the dongle if needed. No hardware is flashed
 automatically by this investigation.
 
 Validation
-A host C regression harness compiles the real patched start_scanning function
-and retry callback with a fake Bluetooth stack. Run:
+A host C regression harness compiles the real patched scan start, scan stop,
+retry, and advertisement-handling functions with a fake Bluetooth stack. Run:
 python3 tests/test_scan_retry.py /path/to/patched/zmk/app/src/split/bluetooth/central.c
 It checks repeated failures, later recovery, already-active scanning, disabled
-transport, and fully connected guards. CI separately compiles the actual Zephyr
+transport, connecting/connected guards, and reservation cleanup. Two host
+threads and explicit barriers exercise start/stop overlap; subprocess timeouts
+prevent a lock regression from hanging indefinitely. CI separately compiles the actual Zephyr
 firmware. Hardware reconnect endurance remains a user test.

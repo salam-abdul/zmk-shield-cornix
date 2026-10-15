@@ -132,18 +132,20 @@ jobs:
 
       - name: West Update
         working-directory: ${{ env.base_dir }}
-        run: west update --fetch-opt=--filter=tree:0
+        run: |
+          # Cached dependencies may contain a previous version of our patch.
+          # Restore only that upstream file before selecting the pinned commit.
+          if [ -d zmk/.git ]; then
+            git -C zmk restore --source=HEAD --worktree -- app/src/split/bluetooth/central.c
+          fi
+          west update --fetch-opt=--filter=tree:0
 
       - name: Apply split reconnect fix
         working-directory: ${{ env.base_dir }}/zmk
         run: |
           patch="${GITHUB_WORKSPACE}/patches/0001-split-retry-failed-scan.patch"
-          if git apply --reverse --check "$patch" 2>/dev/null; then
-            echo "Split reconnect patch already present in cached checkout"
-          else
-            git apply --check "$patch"
-            git apply "$patch"
-          fi
+          git apply --check "$patch"
+          git apply "$patch"
 
       - name: Check ZMK revision
         working-directory: ${{ env.base_dir }}
